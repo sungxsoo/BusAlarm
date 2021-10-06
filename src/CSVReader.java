@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.function.Consumer;
 
-public class CSVReader implements Iterable<String> {
-    private final ArrayList<String> lines;
-    private class CSVIterator implements Iterator<String> {
+public class CSVReader implements Iterable<String[]> {
+    private final ArrayList<String[]> lines;
+    private class CSVIterator implements Iterator<String[]> {
         private int idx = 0;
 
         @Override
@@ -16,7 +16,7 @@ public class CSVReader implements Iterable<String> {
         }
 
         @Override
-        public String next() {
+        public String[] next() {
             return lines.get(idx++);
         }
 
@@ -31,11 +31,11 @@ public class CSVReader implements Iterable<String> {
         }
     }
     public CSVReader() {
-        lines = new ArrayList<String>();
+        lines = new ArrayList<String[]>();
     }
 
     @Override
-    public Iterator<String> iterator() {
+    public Iterator<String[]> iterator() {
         return new CSVIterator();
     }
 
@@ -47,36 +47,25 @@ public class CSVReader implements Iterable<String> {
         BufferedReader reader = new BufferedReader(new FileReader(path));
         while (reader.ready()) {
             String line = reader.readLine();
-            //lines.add(line.split(","));
-            lines.add(line);
+            lines.add(line.split(","));
         }
     }
 
     /**
      * @return 첫번째 요소
      */
-    public String getLine() {
+    public String[] getLine() {
         return lines.remove(0);
     }
 
     /**
      * @return 전체 요소
      */
-    
-    public String[] getLines() {
-        String[] lines2D = new String[lines.size()];
+    public String[][] getLines() {
+        String[][] lines2D = new String[lines.size()][];
         for(int i=0; i < lines.size(); i++) {
             lines2D[i] = lines.get(i);
         }
         return lines2D;
-    }
-    
-    public DateFormat[] getLinesInFormat() {
-    	DateFormat[] linesFormat = new DateFormat[lines.size()];
-    	for(int i =0; i<lines.size(); i++) {
-    		linesFormat[i] = new DateFormat(lines.get(i));
-    	}
-    	return linesFormat;
-    	
     }
 }
